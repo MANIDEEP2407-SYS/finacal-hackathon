@@ -28,7 +28,7 @@ export function Depth1Baseline({ result, sip, open, onToggle }: Props) {
         </p>
       }
     >
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
         <OutputCard value={result.requiredMonthlySIP} label="Required Monthly SIP" size="lg" borderAccent="blue" />
         <OutputCard value={result.inflatedGoalValue}  label="Target Corpus" />
         <OutputCard value={result.totalInvested}       label="You Invest" />

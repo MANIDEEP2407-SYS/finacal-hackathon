@@ -71,6 +71,7 @@ const LOCALES = {
       stepupSavings: (saved: string) => `💡 Step-up reduces your starting SIP by ${saved}/mo compared to a flat SIP.`,
     },
     accessibility: { liveResults: (sip: string, goal: string) => `Updated: Required monthly SIP is ${sip} to reach your goal of ${goal}` },
+    bot: { panelLabel: 'Knowledge Bot', title: 'FinCal Knowledge Bot', close: 'Close', buttonLabel: 'Ask Bot', openLabel: 'Open Knowledge Bot', learnAbout: 'Learn about', learnMore: 'Learn more' },
   },
   hi: {
     app: { title: 'FinCal', subtitle: 'लक्ष्य-आधारित निवेश कैलकुलेटर' },

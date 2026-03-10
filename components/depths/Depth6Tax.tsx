@@ -45,7 +45,7 @@ export function Depth6Tax({ grossCorpus, totalInvested, open, onToggle }: Props)
           hint="Currently 12.5% for equity MFs; consult a tax advisor"
         />
 
-        <div className="grid grid-cols-3 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <OutputCard value={taxResult.postTax} label="Post-Tax Corpus" borderAccent="blue" />
           <OutputCard value={taxResult.taxPaid}  label="Tax Paid"       color="red"   borderAccent="red" />
           <div className="card text-center" style={{ borderTop: '3px solid #919090'}}>

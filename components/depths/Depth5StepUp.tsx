@@ -39,7 +39,7 @@ export function Depth5StepUp({ inflatedGoal, annualReturn, years, flatSIP, open,
         <InputSlider id="d5-stepup" label="Annual SIP Increase (%)" min={1} max={30} step={1} value={stepUpPct}
           onChange={v => update({ stepUpPct: v })} format={v => `+${v}% / yr`} hint="How much your SIP grows each year" />
 
-        <div className="grid grid-cols-3 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <div className="card text-center" style={{ borderTop: '3px solid #919090' }}>
             <p className="text-xs font-semibold uppercase" style={{ color: '#919090' }}>Flat SIP (today)</p>
             <p className="output-number text-xl" style={{ color: '#919090', fontVariantNumeric: 'tabular-nums' }}>{flatSIP}</p>

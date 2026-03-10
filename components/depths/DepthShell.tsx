@@ -1,7 +1,8 @@
 'use client';
 import { type ReactNode } from 'react';
 import { ChevronDown, Info } from 'lucide-react';
-import { useScenario, type DepthId } from '@/context/ScenarioContext';
+import { type DepthId } from '@/context/ScenarioContext';
+import { useMode } from '@/context/ModeContext';
 
 interface Props {
   depth: DepthId;
@@ -30,8 +31,7 @@ export function DepthShell({
   depth, title, hook, badge, formulaLabel, formula,
   isOpen, onToggle, children, conceptContent
 }: Props) {
-  const { state } = useScenario();
-  const isLearning = state.mode === 'learning';
+  const { isLearning } = useMode();
   const color = DEPTH_COLORS[depth];
 
   return (

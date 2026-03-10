@@ -47,7 +47,7 @@ export function Depth3Fees({ sip, years, annualReturn, open, onToggle }: Props) 
           format={v => `${v.toFixed(1)}%`}
         />
 
-        <div className="grid grid-cols-3 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <div className="card text-center" style={{ borderTop: '3px solid #16a34a' }}>
             <p className="text-xs font-semibold uppercase" style={{ color: '#919090' }}>Low-cost (0.5%)</p>
             <p className="output-number text-xl" style={{ color: '#16a34a', fontVariantNumeric: 'tabular-nums' }}>{drag.corpusLowFee}</p>

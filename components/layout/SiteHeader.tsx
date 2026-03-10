@@ -1,5 +1,6 @@
 'use client';
 import { useLang } from '@/context/LangContext';
+import { ModeToggle } from '@/components/shared/ModeToggle';
 import { Globe } from 'lucide-react';
 
 const LANGS = [
@@ -9,7 +10,7 @@ const LANGS = [
 ];
 
 export function SiteHeader() {
-  const { lang, setLang, t } = useLang();
+  const { lang, setLang } = useLang();
   return (
     <header
       role="banner"
@@ -34,6 +35,11 @@ export function SiteHeader() {
           </div>
         </div>
 
+        {/* Center: Mode toggle */}
+        <div className="hidden sm:block">
+          <ModeToggle />
+        </div>
+
         {/* Right: language toggle */}
         <nav aria-label="Language selection" className="flex items-center gap-1">
           <Globe size={14} className="opacity-70 mr-1" aria-hidden="true" />
@@ -41,7 +47,7 @@ export function SiteHeader() {
             <button
               key={l.code}
               onClick={() => setLang(l.code)}
-              className={`px-2 py-1 rounded text-sm font-semibold transition-colors ${lang === l.code ? 'bg-white text-hdfc-blue' : 'text-white hover:bg-white/20'}`}
+              className={`px-2 py-1 rounded text-sm font-semibold transition-colors`}
               style={{ color: lang === l.code ? '#224c87' : 'white', background: lang === l.code ? '#fff' : 'transparent' }}
               aria-pressed={lang === l.code}
               aria-label={`Switch to ${l.label}`}
@@ -50,6 +56,11 @@ export function SiteHeader() {
             </button>
           ))}
         </nav>
+      </div>
+
+      {/* Mobile: Mode toggle row */}
+      <div className="sm:hidden flex justify-center pb-2">
+        <ModeToggle />
       </div>
     </header>
   );

@@ -47,7 +47,7 @@ export function Depth4Crash({ sip, years, annualReturn, open, onToggle }: Props)
         </div>
 
         {/* Comparison */}
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div className="card text-center" style={{ borderTop: '3px solid #224c87' }}>
             <p className="text-xs font-semibold uppercase" style={{ color: '#919090' }}>Continued SIP ✅</p>
             <p className="output-number text-xl" style={{ color: '#224c87', fontVariantNumeric: 'tabular-nums' }}>{result.continuedCorpus}</p>
