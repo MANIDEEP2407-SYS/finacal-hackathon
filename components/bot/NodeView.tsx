@@ -1,16 +1,19 @@
 'use client';
 import type { KnowledgeNode } from '@/lib/knowledgeGraph';
 import { knowledgeGraph } from '@/lib/knowledgeGraph';
+import { useLang } from '@/context/LangContext';
 
 interface Props {
   node: KnowledgeNode;
   resolvedAnswer: string;
   usedDefaults: boolean;
   onNavigate: (nodeId: string) => void;
-  isLearning: boolean;
+  // isLearning removed
 }
 
-export function NodeView({ node, resolvedAnswer, usedDefaults, onNavigate, isLearning }: Props) {
+export function NodeView({ node, resolvedAnswer, usedDefaults, onNavigate }: Props) {
+  const { t } = useLang();
+  const { bot: bl } = t;
   // Highlight ₹ values in the answer
   const highlightedAnswer = resolvedAnswer.replace(
     /(₹[\d,.]+ ?(?:Cr|L|K)?)/g,
@@ -20,7 +23,7 @@ export function NodeView({ node, resolvedAnswer, usedDefaults, onNavigate, isLea
   const relatedNodes = node.relatedNodes
     .map(id => knowledgeGraph[id])
     .filter(Boolean)
-    .slice(0, isLearning ? 4 : 3);
+    .slice(0, 4);
 
   return (
     <div>
@@ -52,14 +55,14 @@ export function NodeView({ node, resolvedAnswer, usedDefaults, onNavigate, isLea
       {/* Defaults notice */}
       {usedDefaults && (
         <div className="defaults-notice">
-          ℹ️ Numbers shown are based on example values. Fill in the calculator for personalized figures.
+          {bl.defaultsNotice}
         </div>
       )}
 
       {/* Related questions */}
       {relatedNodes.length > 0 && (
         <div className="related-nodes mt-4">
-          <div className="related-label">Related Questions</div>
+          <div className="related-label">{bl.relatedTitle}</div>
           {relatedNodes.map(related => (
             <button
               key={related.id}

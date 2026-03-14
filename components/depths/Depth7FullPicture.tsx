@@ -1,6 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { DepthShell } from './DepthShell';
+import { useLang } from '@/context/LangContext';
 import { GrowthChart } from '@/components/charts/GrowthChart';
 import { YearTable } from '@/components/calculator/YearTable';
 import type { GoalResult } from '@/lib/goalEngine';
@@ -12,32 +13,28 @@ interface Props {
 }
 
 export function Depth7FullPicture({ result, open, onToggle }: Props) {
+  const { t } = useLang();
   const [tableOpen, setTableOpen] = useState(false);
   const lastRow = result.yearByYear[result.yearByYear.length - 1];
 
   return (
     <DepthShell
       depth={7}
-      title="The Full Picture"
-      hook='"Your complete, honest, year-by-year roadmap from today to your goal."'
-      badge="Complete View"
+      title={t.depthData.d7.title}
+      hook={t.depthData.d7.hook}
+      badge={t.depthData.d7.badge}
       isOpen={open}
       onToggle={onToggle}
-      conceptContent={
-        <p>
-          This is the unfiltered truth of your investment journey — every year, how much you've contributed,
-          and how close you are to your goal. No surprises. No hidden fees. Just your money, working.
-        </p>
-      }
+      conceptContent={<p>{t.depthData.d7.p1}</p>}
     >
       <div className="space-y-4">
         {/* Summary assumptions strip */}
         <div className="flex flex-wrap gap-2">
           {[
-            { label: 'Horizon', value: `${result.yearByYear.length} yrs` },
-            { label: 'Total Invested', value: result.totalInvested },
-            { label: 'Final Corpus', value: result.yearByYear.length > 0 ? result.yearByYear[result.yearByYear.length - 1].corpusValue : 'N/A' },
-            { label: 'Wealth Gained', value: result.wealthGained },
+            { label: t.depthData.d7.h, value: `${result.yearByYear.length} ${t.table.year}s` },
+            { label: t.depthData.d7.ti, value: result.totalInvested },
+            { label: t.depthData.d7.fc, value: result.yearByYear.length > 0 ? result.yearByYear[result.yearByYear.length - 1].corpusValue : 'N/A' },
+            { label: t.depthData.d7.wg, value: result.wealthGained },
           ].map(item => (
             <div key={item.label} className="px-3 py-2 rounded-lg text-center" style={{ background: '#e8eef7' }}>
               <p className="text-xs" style={{ color: '#919090' }}>{item.label}</p>

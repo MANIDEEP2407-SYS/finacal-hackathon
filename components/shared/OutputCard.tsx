@@ -21,7 +21,7 @@ export function OutputCard({ value, label, sublabel, size = 'md', color = 'blue'
     }
   }, [value]);
 
-  const sizeClass = size === 'lg' ? 'text-xl sm:text-2xl lg:text-3xl' : size === 'sm' ? 'text-base sm:text-lg' : 'text-lg sm:text-xl lg:text-2xl';
+  const sizeClass = size === 'lg' ? 'text-lg sm:text-xl lg:text-2xl' : size === 'sm' ? 'text-xs sm:text-sm' : 'text-sm sm:text-base lg:text-lg';
   const colorStyle = color === 'red' ? '#da3832' : color === 'green' ? '#16a34a' : '#224c87';
 
   return (
@@ -30,13 +30,13 @@ export function OutputCard({ value, label, sublabel, size = 'md', color = 'blue'
       role="region"
       aria-label={label}
     >
-      <p className="text-xs font-semibold uppercase tracking-wide mb-1 truncate" style={{ color: '#919090' }}>
+      <p className="text-[10px] sm:text-xs font-bold uppercase tracking-wider mb-1 whitespace-nowrap overflow-hidden text-ellipsis" style={{ color: '#919090' }}>
         {label}
       </p>
       <p
-        className={`output-number ${sizeClass} count-flash`}
+        className={`output-number ${sizeClass} count-flash whitespace-nowrap`}
         key={value}
-        style={{ color: colorStyle, fontVariantNumeric: 'tabular-nums', wordBreak: 'break-word', lineHeight: 1.1 }}
+        style={{ color: colorStyle, fontVariantNumeric: 'tabular-nums', lineHeight: 1.1 }}
         aria-live="polite"
         aria-atomic="true"
         title={display}

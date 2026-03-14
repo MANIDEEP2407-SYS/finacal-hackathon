@@ -1,34 +1,38 @@
 'use client';
+import { useLang } from '@/context/LangContext';
 import type { UserLevel } from '@/context/UserContext';
 
 interface Props { onSelect: (level: UserLevel) => void; }
 
-const LEVELS = [
-  {
-    level: 'beginner' as UserLevel,
-    icon: '🌱',
-    title: 'Just starting out',
-    desc: "I'm new to investing",
-  },
-  {
-    level: 'intermediate' as UserLevel,
-    icon: '📈',
-    title: 'I know the basics',
-    desc: "I've invested before",
-  },
-  {
-    level: 'advanced' as UserLevel,
-    icon: '🎯',
-    title: "I'm experienced",
-    desc: 'I invest regularly',
-  },
-];
-
 export function Step2Level({ onSelect }: Props) {
+  const { t } = useLang();
+  const { onboarding: ol } = t;
+
+  const LEVELS = [
+    {
+      level: 'beginner' as UserLevel,
+      icon: '🌱',
+      title: ol.levels.beginner.title,
+      desc: ol.levels.beginner.desc,
+    },
+    {
+      level: 'intermediate' as UserLevel,
+      icon: '📈',
+      title: ol.levels.intermediate.title,
+      desc: ol.levels.intermediate.desc,
+    },
+    {
+      level: 'advanced' as UserLevel,
+      icon: '🎯',
+      title: ol.levels.advanced.title,
+      desc: ol.levels.advanced.desc,
+    },
+  ];
+
   return (
     <div>
       <h1 className="text-xl font-bold mb-2" style={{ color: '#224c87' }}>
-        How familiar are you with mutual fund investing?
+        {ol.levelTitle}
       </h1>
       <div className="h-1 w-16 mt-3 mb-8 rounded" style={{ background: '#224c87' }} />
 

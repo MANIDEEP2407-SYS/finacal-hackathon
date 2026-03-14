@@ -1,4 +1,4 @@
-// File: C:\Users\Public\Documents\4thsem\projects\fincal-hdfc\app\layout.tsx
+// File: C:\Users\hrithikesh\OneDrive\Desktop\hackthon\finacal-hackathon\app\layout.tsx
 import * as entry from '../../../app/layout.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

@@ -9,7 +9,6 @@ import { calculateGoal } from '@/lib/goalEngine';
 import { GoalMountain } from '@/components/visualizer/GoalMountain';
 import { GoalPresets, type Preset } from '@/components/calculator/GoalPresets';
 import { InputPanel } from '@/components/calculator/InputPanel';
-import { ModeToggle } from '@/components/shared/ModeToggle';
 import { Depth1Baseline } from '@/components/depths/Depth1Baseline';
 import { Depth2Inflation } from '@/components/depths/Depth2Inflation';
 import { Depth3Fees } from '@/components/depths/Depth3Fees';
@@ -35,7 +34,6 @@ export function SevenDepthsCalculator() {
   const { state: userState } = useUser();
   const { state: scenario, update, isUnlocked, unlockDepth } = useScenario();
   const { t } = useLang();
-  const { isLearning, isPlanning } = useMode();
   const { updateState: updateCalcCtx } = useCalculator();
 
   const [inputs, setInputs] = useState<CalcInputs>(DEFAULT_CALC);
@@ -82,7 +80,7 @@ export function SevenDepthsCalculator() {
       annualReturn: inputs.annualReturn,
       expenseRatio: scenario.primary.expenseRatio,
       stepUpRate: inputs.stepUpPct,
-      goalLabel: selectedPreset ?? 'your goal',
+      goalLabel: selectedPreset ?? t.common.yourGoal,
       inflatedGoalValue: inflatedGoalRaw,
       requiredMonthlySIP: sipNum,
       totalInvested: lastRow.rawInvested,
@@ -113,56 +111,50 @@ export function SevenDepthsCalculator() {
   const highestUnlocked = Math.max(...([...scenario.unlockedDepths])) as DepthId;
   const canUnlockMore = highestUnlocked < MAX_DEPTH;
 
-  // In planning mode, auto-unlock all depths
-  const effectiveUnlocked = isPlanning
-    ? new Set([1, 2, 3, 4, 5, 6, 7] as DepthId[])
-    : scenario.unlockedDepths;
-
-  const effectiveIsUnlocked = (d: DepthId) => isPlanning || isUnlocked(d);
+  const effectiveUnlocked = scenario.unlockedDepths;
+  const effectiveIsUnlocked = (d: DepthId) => isUnlocked(d);
 
   const liveMsg = result
-    ? `Updated: Required SIP is ${result.requiredMonthlySIP} to reach ${result.inflatedGoalValue}`
+    ? t.accessibility.liveResults(result.requiredMonthlySIP, result.inflatedGoalValue)
     : '';
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-6">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
       <LiveRegion message={liveMsg} />
 
       {/* Level chip */}
-      <div className="flex flex-wrap items-center justify-between gap-3 mb-5">
+      <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
         {userState.level && (
-          <span className="text-sm font-semibold px-3 py-1 rounded-full" style={{ background: '#e8eef7', color: '#224c87' }}>
-            {userState.level === 'beginner' && '🌱 Foundations Mode'}
-            {userState.level === 'intermediate' && '📈 Building Up'}
-            {userState.level === 'advanced' && '🎯 Advanced Mode'}
+          <span className="text-sm font-bold px-4 py-1.5 rounded-full shadow-sm" style={{ background: 'linear-gradient(135deg, rgba(232,238,247,0.9), rgba(255,255,255,0.9))', color: '#224c87', border: '1px solid rgba(34,76,135,0.1)' }}>
+            {userState.level === 'beginner' && t.levels.foundations}
+            {userState.level === 'intermediate' && t.levels.building}
+            {userState.level === 'advanced' && t.levels.advanced}
           </span>
         )}
-        {/* Mobile mode toggle (hidden on desktop since it's in header) */}
-        <div className="sm:hidden">
-          <ModeToggle />
-        </div>
       </div>
 
       {/* Goal presets */}
-      <GoalPresets onSelect={handlePreset} selected={selectedPreset} />
+      <div className="mb-8">
+        <GoalPresets onSelect={handlePreset} selected={selectedPreset} />
+      </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 xl:gap-12">
         {/* Input panel */}
-        <section aria-label="Calculator inputs" className="lg:col-span-2">
-          <div className="card">
-            <h2 className="text-base font-bold mb-4" style={{ color: '#224c87' }}>
-              {isLearning ? 'Your Goal Details' : 'Goal Parameters'}
+        <section aria-label="Calculator inputs" className="lg:col-span-5">
+          <div className="card sticky top-24">
+            <h2 className="text-lg font-extrabold mb-6" style={{ color: '#0f172a' }}>
+              {t.common.goalDetails}
             </h2>
             <InputPanel inputs={inputs} onChange={handleChange} />
           </div>
         </section>
 
         {/* Goal Mountain + Depths */}
-        <section aria-label="Results and depths" className="lg:col-span-3 flex flex-col gap-4">
+        <section aria-label="Results and depths" className="lg:col-span-7 flex flex-col gap-6">
           {/* GoalMountain */}
           {result && (
             <div className="card">
-              <h2 className="text-sm font-bold mb-3" style={{ color: '#224c87' }}>Your Goal Mountain</h2>
+              <h2 className="text-sm font-bold mb-3" style={{ color: '#224c87' }}>{t.common.goalMountain}</h2>
               <GoalMountain
                 sipAmount={parseFloat(result.requiredMonthlySIP.replace(/[₹, ]/g, ''))}
                 targetCorpus={inflatedGoalRaw}
@@ -172,7 +164,7 @@ export function SevenDepthsCalculator() {
                 crashAtYear={scenario.primary.crashAtYear}
                 hasFeeDrag={effectiveIsUnlocked(3)}
                 feeDragAmount={effectiveIsUnlocked(3) ? scenario.primary.expenseRatio * inflatedGoalRaw / 100 : 0}
-                label={`Goal Mountain: SIP of ${result.requiredMonthlySIP}/month over ${inputs.yearsToGoal} years`}
+                label={t.accessibility.mountainLabel(result.requiredMonthlySIP, inputs.yearsToGoal)}
               />
             </div>
           )}
@@ -184,14 +176,12 @@ export function SevenDepthsCalculator() {
                 <Depth1Baseline
                   result={result}
                   sip={parseFloat(result.requiredMonthlySIP.replace(/[₹, ]/g, ''))}
-                  open={isPlanning || openDepths.has(1)}
+                  open={openDepths.has(1)}
                   onToggle={() => toggleDepth(1)}
                 />
-                {isLearning && (
-                  <div className="mt-1 ml-4">
-                    <InlineBotTrigger nodeId="what-is-sip" label="What is a SIP?" />
-                  </div>
-                )}
+                <div className="mt-1 ml-4">
+                  <InlineBotTrigger nodeId="what-is-sip" label={t.bot.questions.sip} />
+                </div>
               </div>
             )}
             {effectiveIsUnlocked(2) && result && (
@@ -201,14 +191,12 @@ export function SevenDepthsCalculator() {
                   presentCost={inputs.presentCost}
                   inflationRate={inputs.inflationRate}
                   years={inputs.yearsToGoal}
-                  open={isPlanning || openDepths.has(2)}
+                  open={openDepths.has(2)}
                   onToggle={() => toggleDepth(2)}
                 />
-                {isLearning && (
-                  <div className="mt-1 ml-4">
-                    <InlineBotTrigger nodeId="what-is-inflation" label="What is inflation?" />
-                  </div>
-                )}
+                <div className="mt-1 ml-4">
+                  <InlineBotTrigger nodeId="what-is-inflation" label={t.bot.questions.inflation} />
+                </div>
               </div>
             )}
             {effectiveIsUnlocked(3) && (
@@ -217,14 +205,12 @@ export function SevenDepthsCalculator() {
                   sip={parseFloat(result?.requiredMonthlySIP?.replace(/[₹, ]/g, '') ?? '0')}
                   years={inputs.yearsToGoal}
                   annualReturn={inputs.annualReturn}
-                  open={isPlanning || openDepths.has(3)}
+                  open={openDepths.has(3)}
                   onToggle={() => toggleDepth(3)}
                 />
-                {isLearning && (
-                  <div className="mt-1 ml-4">
-                    <InlineBotTrigger nodeId="what-is-expense-ratio" label="What is an expense ratio?" />
-                  </div>
-                )}
+                <div className="mt-1 ml-4">
+                  <InlineBotTrigger nodeId="what-is-expense-ratio" label={t.bot.questions.fees} />
+                </div>
               </div>
             )}
             {effectiveIsUnlocked(4) && (
@@ -233,14 +219,12 @@ export function SevenDepthsCalculator() {
                   sip={parseFloat(result?.requiredMonthlySIP?.replace(/[₹, ]/g, '') ?? '0')}
                   years={inputs.yearsToGoal}
                   annualReturn={inputs.annualReturn}
-                  open={isPlanning || openDepths.has(4)}
+                  open={openDepths.has(4)}
                   onToggle={() => toggleDepth(4)}
                 />
-                {isLearning && (
-                  <div className="mt-1 ml-4">
-                    <InlineBotTrigger nodeId="what-happens-in-a-crash" />
-                  </div>
-                )}
+                <div className="mt-1 ml-4">
+                  <InlineBotTrigger nodeId="what-happens-in-a-crash" label={t.bot.questions.crash} />
+                </div>
               </div>
             )}
             {effectiveIsUnlocked(5) && result && (
@@ -250,14 +234,12 @@ export function SevenDepthsCalculator() {
                   annualReturn={inputs.annualReturn}
                   years={inputs.yearsToGoal}
                   flatSIP={result.requiredMonthlySIP}
-                  open={isPlanning || openDepths.has(5)}
+                  open={openDepths.has(5)}
                   onToggle={() => toggleDepth(5)}
                 />
-                {isLearning && (
-                  <div className="mt-1 ml-4">
-                    <InlineBotTrigger nodeId="what-is-step-up-sip" label="What is a step-up SIP?" />
-                  </div>
-                )}
+                <div className="mt-1 ml-4">
+                  <InlineBotTrigger nodeId="what-is-step-up-sip" label={t.bot.questions.stepup} />
+                </div>
               </div>
             )}
             {effectiveIsUnlocked(6) && lastRow && (
@@ -265,26 +247,23 @@ export function SevenDepthsCalculator() {
                 <Depth6Tax
                   grossCorpus={lastRow.rawCorpus}
                   totalInvested={lastRow.rawInvested}
-                  open={isPlanning || openDepths.has(6)}
+                  open={openDepths.has(6)}
                   onToggle={() => toggleDepth(6)}
                 />
-                {isLearning && (
-                  <div className="mt-1 ml-4">
-                    <InlineBotTrigger nodeId="what-is-ltcg" label="What is LTCG tax?" />
-                  </div>
-                )}
+                <div className="mt-1 ml-4">
+                  <InlineBotTrigger nodeId="what-is-ltcg" label={t.bot.questions.tax} />
+                </div>
               </div>
             )}
             {effectiveIsUnlocked(7) && result && (
               <Depth7FullPicture
                 result={result}
-                open={isPlanning || openDepths.has(7)}
+                open={openDepths.has(7)}
                 onToggle={() => toggleDepth(7)}
               />
             )}
 
-            {/* Unlock next depth CTA — only in learning mode */}
-            {isLearning && canUnlockMore && result && (
+            {canUnlockMore && result && (
               <div className="flex justify-center py-2">
                 <button
                   type="button"
@@ -293,15 +272,15 @@ export function SevenDepthsCalculator() {
                   aria-label={`Unlock depth ${highestUnlocked + 1} of 7`}
                 >
                   <ChevronDown size={16} aria-hidden="true" />
-                  Show me more · Depth {highestUnlocked + 1} / {MAX_DEPTH}
+                  {t.common.showMore(highestUnlocked + 1)}
                 </button>
               </div>
             )}
 
-            {isLearning && !canUnlockMore && (
+            {!canUnlockMore && (
               <div className="text-center py-4">
                 <p className="text-sm font-semibold" style={{ color: '#224c87' }}>
-                  🎉 You&apos;ve unlocked the full picture — all 7 depths explored!
+                  {t.common.fullPicture}
                 </p>
               </div>
             )}

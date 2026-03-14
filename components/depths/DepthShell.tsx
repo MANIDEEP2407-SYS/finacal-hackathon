@@ -3,6 +3,7 @@ import { type ReactNode } from 'react';
 import { ChevronDown, Info } from 'lucide-react';
 import { type DepthId } from '@/context/ScenarioContext';
 import { useMode } from '@/context/ModeContext';
+import { useLang } from '@/context/LangContext';
 
 interface Props {
   depth: DepthId;
@@ -31,7 +32,8 @@ export function DepthShell({
   depth, title, hook, badge, formulaLabel, formula,
   isOpen, onToggle, children, conceptContent
 }: Props) {
-  const { isLearning } = useMode();
+  const { t } = useLang();
+  // isLearning removed
   const color = DEPTH_COLORS[depth];
 
   return (
@@ -60,7 +62,7 @@ export function DepthShell({
         </span>
         <div className="flex-1 min-w-0">
           <p className="font-bold text-base leading-tight" style={{ color }}>{title}</p>
-          {isLearning && <p className="text-xs mt-1 italic" style={{ color: '#919090' }}>{hook}</p>}
+          {<p className="text-xs mt-1 italic" style={{ color: '#919090' }}>{hook}</p>}
         </div>
         {badge && (
           <span
@@ -83,7 +85,7 @@ export function DepthShell({
           <div className="px-5 py-4">{children}</div>
 
           {/* Concept section (learning mode only) */}
-          {isLearning && conceptContent && (
+          {conceptContent && (
             <div className="px-5 pb-4">
               <div
                 className="rounded-lg p-4"
@@ -92,7 +94,7 @@ export function DepthShell({
                 <div className="flex items-center gap-2 mb-2">
                   <Info size={13} style={{ color }} aria-hidden="true" />
                   <span className="text-xs font-bold uppercase tracking-wider" style={{ color }}>
-                    Why this matters
+                    {t.common.whyMatters}
                   </span>
                 </div>
                 <div className="text-sm" style={{ color: '#3a3a3a' }}>{conceptContent}</div>
@@ -108,7 +110,7 @@ export function DepthShell({
                   className="cursor-pointer text-xs font-semibold select-none"
                   style={{ color: '#919090' }}
                 >
-                  🔢 {formulaLabel ?? 'Show formula'}
+                  🔢 {formulaLabel ?? t.common.showFormula}
                 </summary>
                 <code
                   className="block mt-2 text-xs px-3 py-2 rounded"

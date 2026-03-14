@@ -1,6 +1,5 @@
 'use client';
 import { useLang } from '@/context/LangContext';
-import { ModeToggle } from '@/components/shared/ModeToggle';
 import { Globe } from 'lucide-react';
 
 const LANGS = [
@@ -14,8 +13,14 @@ export function SiteHeader() {
   return (
     <header
       role="banner"
-      className="bg-hdfc-blue text-white shadow-md"
-      style={{ background: '#224c87' }}
+      className="text-white sticky top-0 z-50 transition-all duration-300"
+      style={{ 
+        background: 'linear-gradient(135deg, rgba(34,76,135,0.95) 0%, rgba(26,58,107,0.98) 100%)',
+        backdropFilter: 'blur(12px)',
+        WebkitBackdropFilter: 'blur(12px)',
+        borderBottom: '1px solid rgba(255,255,255,0.1)',
+        boxShadow: '0 4px 24px -4px rgba(0,0,0,0.2)'
+      }}
     >
       <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
         {/* Logo */}
@@ -35,10 +40,7 @@ export function SiteHeader() {
           </div>
         </div>
 
-        {/* Center: Mode toggle */}
-        <div className="hidden sm:block">
-          <ModeToggle />
-        </div>
+        {/* Removed Center Mode toggle */}
 
         {/* Right: language toggle */}
         <nav aria-label="Language selection" className="flex items-center gap-1">
@@ -58,10 +60,7 @@ export function SiteHeader() {
         </nav>
       </div>
 
-      {/* Mobile: Mode toggle row */}
-      <div className="sm:hidden flex justify-center pb-2">
-        <ModeToggle />
-      </div>
+      {/* Removed Mobile Mode toggle row */}
     </header>
   );
 }

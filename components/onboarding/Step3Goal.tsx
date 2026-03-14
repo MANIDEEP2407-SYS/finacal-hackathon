@@ -1,21 +1,25 @@
 'use client';
+import { useLang } from '@/context/LangContext';
 import type { GoalKey } from './OnboardingFlow';
 
 interface Props { onSelect: (goal: GoalKey) => void; }
 
-const GOALS: { key: GoalKey; icon: string; title: string }[] = [
-  { key: 'education',  icon: '🎓', title: "Child's Education" },
-  { key: 'home',       icon: '🏠', title: 'Home / Property' },
-  { key: 'vehicle',    icon: '🚗', title: 'Vehicle' },
-  { key: 'retirement', icon: '🌅', title: 'Retirement' },
-  { key: 'custom',     icon: '✏️', title: "Something else — I'll set my own goal" },
-];
-
 export function Step3Goal({ onSelect }: Props) {
+  const { t } = useLang();
+  const { onboarding: ol } = t;
+
+  const GOALS: { key: GoalKey; icon: string; title: string }[] = [
+    { key: 'education',  icon: '🎓', title: ol.goals.education },
+    { key: 'home',       icon: '🏠', title: ol.goals.home },
+    { key: 'vehicle',    icon: '🚗', title: ol.goals.vehicle },
+    { key: 'retirement', icon: '🌅', title: ol.goals.retirement },
+    { key: 'custom',     icon: '✏️', title: ol.goals.custom },
+  ];
+
   return (
     <div>
       <h1 className="text-xl font-bold mb-2" style={{ color: '#224c87' }}>
-        What are you planning for?
+        {ol.goalTitle}
       </h1>
       <div className="h-1 w-16 mt-3 mb-8 rounded" style={{ background: '#224c87' }} />
 
@@ -59,7 +63,7 @@ export function Step3Goal({ onSelect }: Props) {
       >
         <span className="text-xl">✏️</span>
         <span className="text-sm font-semibold" style={{ color: '#1a1a1a' }}>
-          Something else — I&apos;ll set my own goal
+          {ol.goals.custom}
         </span>
       </button>
     </div>

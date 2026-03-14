@@ -8,11 +8,14 @@ import { NodeView } from './NodeView';
 import { CategoryBrowser } from './CategoryBrowser';
 import { BreadcrumbTrail } from './BreadcrumbTrail';
 import { useMode } from '@/context/ModeContext';
+import { useLang } from '@/context/LangContext';
 
 export function KnowledgeBot() {
+  const { t } = useLang();
+  const { bot: bl } = t;
   const { state, closeBot, navigateTo, goBack, setCategory } = useBot();
   const { state: calcState } = useCalculator();
-  const { isLearning } = useMode();
+  // isLearning removed
   const panelRef = useRef<HTMLElement>(null);
   const closeBtnRef = useRef<HTMLButtonElement>(null);
 
@@ -67,7 +70,7 @@ export function KnowledgeBot() {
       <aside
         ref={panelRef}
         role="complementary"
-        aria-label="Knowledge Bot — learn about financial concepts"
+        aria-label={bl.panelAria}
         className="knowledge-bot-panel"
         id="knowledge-bot"
       >
@@ -75,13 +78,13 @@ export function KnowledgeBot() {
         <div className="bot-header">
           <div className="flex items-center gap-2">
             <span className="text-lg" aria-hidden="true">💬</span>
-            <span className="bot-title">FinCal Knowledge Bot</span>
+            <span className="bot-title">{bl.panelTitle}</span>
           </div>
           <button
             ref={closeBtnRef}
             onClick={closeBot}
             className="bot-close"
-            aria-label="Close knowledge bot"
+            aria-label={bl.close}
           >
             ✕
           </button>
@@ -107,7 +110,7 @@ export function KnowledgeBot() {
             resolvedAnswer={resolvedAnswer}
             usedDefaults={usedDefaults}
             onNavigate={navigateTo}
-            isLearning={isLearning}
+              // isLearning removed
           />
         </div>
 

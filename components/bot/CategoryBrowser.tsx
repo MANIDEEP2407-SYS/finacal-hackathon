@@ -1,6 +1,7 @@
 'use client';
 import { CATEGORIES, knowledgeGraph } from '@/lib/knowledgeGraph';
 import { getNodesByCategory } from '@/lib/botNavigation';
+import { useLang } from '@/context/LangContext';
 
 interface Props {
   activeCategory: string | null;
@@ -10,6 +11,8 @@ interface Props {
 }
 
 export function CategoryBrowser({ activeCategory, currentNodeId, onNavigate, onSetCategory }: Props) {
+  const { t } = useLang();
+  const { bot: bl } = t;
   const filteredNodes = activeCategory ? getNodesByCategory(activeCategory) : [];
 
   return (
@@ -23,7 +26,7 @@ export function CategoryBrowser({ activeCategory, currentNodeId, onNavigate, onS
             onClick={() => onSetCategory(activeCategory === cat.id ? null : cat.id)}
             className={`category-tab ${activeCategory === cat.id ? 'active' : ''}`}
           >
-            {cat.label}
+            {bl.categories[cat.id as keyof typeof bl.categories] || cat.label}
           </button>
         ))}
       </div>

@@ -1,9 +1,12 @@
 'use client';
 import { useBot } from '@/context/BotContext';
 import { knowledgeGraph } from '@/lib/knowledgeGraph';
+import { useLang } from '@/context/LangContext';
 
 // ── Floating button — always visible bottom-right when panel is closed ──
 export function FloatingBotButton() {
+  const { t } = useLang();
+  const { bot: bl } = t;
   const { openBot, state } = useBot();
 
   if (state.isOpen) return null;
@@ -12,12 +15,12 @@ export function FloatingBotButton() {
     <button
       onClick={() => openBot()}
       className="bot-float-btn"
-      aria-label="Open Knowledge Bot"
+      aria-label={bl.panelTitle}
       aria-expanded={false}
       aria-controls="knowledge-bot"
     >
       <span aria-hidden="true">💬</span>
-      <span className="bot-float-label">Ask Bot</span>
+      <span className="bot-float-label">{bl.askBot}</span>
     </button>
   );
 }
@@ -29,6 +32,8 @@ interface InlineTriggerProps {
 }
 
 export function InlineBotTrigger({ nodeId, label }: InlineTriggerProps) {
+  const { t } = useLang();
+  const { bot: bl } = t;
   const { openBot } = useBot();
   const node = knowledgeGraph[nodeId];
   if (!node) return null;
@@ -38,9 +43,9 @@ export function InlineBotTrigger({ nodeId, label }: InlineTriggerProps) {
       type="button"
       onClick={() => openBot(nodeId)}
       className="bot-trigger"
-      aria-label={`Learn about: ${node.question}`}
+      aria-label={`${bl.learnAbout}: ${node.question}`}
     >
-      {label ?? 'Learn more'} →
+      {label ?? bl.learnMore} →
     </button>
   );
 }

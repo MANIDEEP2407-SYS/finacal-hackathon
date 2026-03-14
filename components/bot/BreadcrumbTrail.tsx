@@ -1,6 +1,7 @@
 'use client';
 import { knowledgeGraph } from '@/lib/knowledgeGraph';
 import { ChevronLeft } from 'lucide-react';
+import { useLang } from '@/context/LangContext';
 
 interface Props {
   history: string[];
@@ -9,6 +10,8 @@ interface Props {
 }
 
 export function BreadcrumbTrail({ history, onBack, canGoBack }: Props) {
+  const { t } = useLang();
+  const { bot: bl } = t;
   const currentId = history[history.length - 1];
   const currentNode = knowledgeGraph[currentId];
   const prevId = history.length > 1 ? history[history.length - 2] : null;
@@ -22,10 +25,10 @@ export function BreadcrumbTrail({ history, onBack, canGoBack }: Props) {
           onClick={onBack}
           className="flex items-center gap-1 text-xs font-medium px-2 py-1 rounded transition-colors"
           style={{ color: '#224c87' }}
-          aria-label={`Go back to: ${prevNode?.question ?? 'previous question'}`}
+          aria-label={bl.backTo(prevNode?.question ?? bl.back)}
         >
           <ChevronLeft size={14} />
-          Back
+          {bl.back}
         </button>
       )}
       <span className="text-xs truncate" style={{ color: '#919090' }} title={currentNode?.question}>

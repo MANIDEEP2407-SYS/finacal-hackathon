@@ -1,4 +1,5 @@
 'use client';
+import { useLang } from '@/context/LangContext';
 
 interface Props { onSelect: (langCode: string) => void; }
 
@@ -9,18 +10,21 @@ const LANGUAGES = [
 ];
 
 export function Step1Language({ onSelect }: Props) {
+  const { t } = useLang();
+  const { onboarding: ol } = t;
+
   return (
     <div className="text-center">
-      <h1 className="text-2xl font-bold mb-2" style={{ color: '#224c87' }}>
-        Welcome to FinCal
+      <h1 className="text-xl font-bold mb-2" style={{ color: '#224c87' }}>
+        {ol.headline}
       </h1>
-      <p className="text-sm mb-1" style={{ color: '#919090' }}>
-        HDFC Investor Education
+      <p className="text-xs mb-1" style={{ color: '#919090' }}>
+        {ol.sub}
       </p>
-      <div className="h-1 w-16 mx-auto mt-4 mb-8 rounded" style={{ background: '#224c87' }} />
+      <div className="h-1 w-12 mx-auto mt-3 mb-6 rounded" style={{ background: '#224c87' }} />
 
-      <p className="text-base font-medium mb-6" style={{ color: '#1a1a1a' }}>
-        Choose your language to get started
+      <p className="text-sm font-medium mb-5" style={{ color: '#1a1a1a' }}>
+        {ol.chooseLang}
       </p>
 
       <div className="grid grid-cols-3 gap-4 max-w-sm mx-auto">

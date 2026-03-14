@@ -22,7 +22,7 @@ interface ScenarioState {
   compare: ScenarioInputs | null;
   unlockedDepths: Set<DepthId>;
   compareMode: boolean;
-  mode: 'learning' | 'planning';
+  mode: 'calculator';
 }
 
 type Action =
@@ -30,7 +30,7 @@ type Action =
   | { type: 'UPDATE_COMPARE'; patch: Partial<ScenarioInputs> }
   | { type: 'UNLOCK_DEPTH'; depth: DepthId }
   | { type: 'TOGGLE_COMPARE' }
-  | { type: 'SET_MODE'; mode: 'learning' | 'planning' }
+  | { type: 'SET_MODE'; mode: 'calculator' }
   | { type: 'PRESET'; inputs: Partial<ScenarioInputs> }
   | { type: 'RESET' };
 
@@ -58,7 +58,7 @@ function initState(): ScenarioState {
     compare: null,
     unlockedDepths: new Set([1] as DepthId[]),
     compareMode: false,
-    mode: 'learning',
+    mode: 'calculator',
   };
 }
 
@@ -91,7 +91,7 @@ interface ScenarioCtx {
   updateCompare: (patch: Partial<ScenarioInputs>) => void;
   unlockDepth: (d: DepthId) => void;
   toggleCompare: () => void;
-  setMode: (m: 'learning' | 'planning') => void;
+  setMode: (m: 'calculator') => void;
   setPreset: (inputs: Partial<ScenarioInputs>) => void;
   reset: () => void;
   isUnlocked: (d: DepthId) => boolean;
@@ -123,7 +123,7 @@ export function ScenarioProvider({ children }: { children: ReactNode }) {
     persist({ ...state, unlockedDepths: new Set([...state.unlockedDepths, depth]) });
   }, [state, persist]);
   const toggleCompare = useCallback(() => dispatch({ type: 'TOGGLE_COMPARE' }), []);
-  const setMode = useCallback((mode: 'learning' | 'planning') => dispatch({ type: 'SET_MODE', mode }), []);
+  const setMode = useCallback((mode: 'calculator') => dispatch({ type: 'SET_MODE', mode }), []);
   const setPreset = useCallback((inputs: Partial<ScenarioInputs>) => dispatch({ type: 'PRESET', inputs }), []);
   const reset = useCallback(() => { dispatch({ type: 'RESET' }); localStorage.removeItem('fincal-scenario'); }, []);
   const isUnlocked = useCallback((d: DepthId) => state.unlockedDepths.has(d), [state.unlockedDepths]);
