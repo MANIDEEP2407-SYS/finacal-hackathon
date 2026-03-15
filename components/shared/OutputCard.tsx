@@ -21,22 +21,22 @@ export function OutputCard({ value, label, sublabel, size = 'md', color = 'blue'
     }
   }, [value]);
 
-  const sizeClass = size === 'lg' ? 'text-lg sm:text-xl lg:text-2xl' : size === 'sm' ? 'text-xs sm:text-sm' : 'text-sm sm:text-base lg:text-lg';
+  const sizeClass = size === 'lg' ? 'text-base sm:text-lg lg:text-xl xl:text-2xl' : size === 'sm' ? 'text-xs sm:text-sm' : 'text-sm sm:text-base lg:text-lg';
   const colorStyle = color === 'red' ? '#da3832' : color === 'green' ? '#16a34a' : '#224c87';
 
   return (
     <div
-      className={`card p-3 sm:p-4 min-w-0 ${borderAccent === 'red' ? 'card-red-border' : borderAccent === 'blue' ? 'card-blue-border' : ''}`}
+      className={`card p-3 sm:p-4 min-w-0 h-full flex flex-col justify-center ${borderAccent === 'red' ? 'card-red-border' : borderAccent === 'blue' ? 'card-blue-border' : ''}`}
       role="region"
       aria-label={label}
     >
-      <p className="text-[10px] sm:text-xs font-bold uppercase tracking-wider mb-1 whitespace-nowrap overflow-hidden text-ellipsis" style={{ color: '#919090' }}>
+      <p className="text-[10px] sm:text-xs font-bold uppercase tracking-wider mb-1 leading-tight" style={{ color: '#919090' }}>
         {label}
       </p>
       <p
-        className={`output-number ${sizeClass} count-flash whitespace-nowrap`}
+        className="output-number count-flash whitespace-nowrap overflow-visible"
         key={value}
-        style={{ color: colorStyle, fontVariantNumeric: 'tabular-nums', lineHeight: 1.1 }}
+        style={{ color: colorStyle, fontVariantNumeric: 'tabular-nums', lineHeight: 1.1, fontSize: size === 'lg' ? 'clamp(0.85rem, 2.2vw, 1.25rem)' : 'clamp(0.75rem, 1.8vw, 1.1rem)' }}
         aria-live="polite"
         aria-atomic="true"
         title={display}

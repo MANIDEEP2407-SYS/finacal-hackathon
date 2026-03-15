@@ -11,7 +11,7 @@ interface Props {
 }
 
 export function CategoryBrowser({ activeCategory, currentNodeId, onNavigate, onSetCategory }: Props) {
-  const { t } = useLang();
+  const { t, lang } = useLang();
   const { bot: bl } = t;
   const filteredNodes = activeCategory ? getNodesByCategory(activeCategory) : [];
 
@@ -58,7 +58,7 @@ export function CategoryBrowser({ activeCategory, currentNodeId, onNavigate, onS
                 }
               }}
             >
-              {node.question}
+            {((lang !== 'en' && node.questionI18n?.[lang]) ? node.questionI18n[lang]! : node.question)}
             </button>
           ))}
         </div>

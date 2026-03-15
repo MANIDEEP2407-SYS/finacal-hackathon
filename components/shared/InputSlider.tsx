@@ -36,7 +36,7 @@ export function InputSlider({ id, label, hint, min, max, step, value, onChange, 
 
   return (
     <div className="mb-5">
-      <div className="flex items-center justify-between mb-1">
+      <div className="flex items-center justify-between mb-0">
         <label htmlFor={`${id}-num`} className="input-label">
           {label}
           {hint && (
@@ -65,7 +65,7 @@ export function InputSlider({ id, label, hint, min, max, step, value, onChange, 
         step={step}
         value={value}
         onChange={handleSlider}
-        className="range-slider w-full mb-2"
+        className="range-slider w-full my-4"
         aria-labelledby={`${id}-label`}
         aria-valuemin={min}
         aria-valuemax={max}

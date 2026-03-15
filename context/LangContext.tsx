@@ -45,6 +45,8 @@ const LOCALES = {
     },
     inputs: {
       currentCost: 'Current Cost of Goal (₹)',
+      currentSavings: 'Current Savings (₹)',
+      salary: 'Monthly Salary (₹)',
       years: 'Years to Goal',
       yearsSuffix: 'yrs',
       inflation: 'Inflation Rate (%)',
@@ -54,6 +56,8 @@ const LOCALES = {
       taxRate: 'LTCG Tax Rate (%)',
       hints: {
         years: 'How many years until you need this money?',
+        currentSavings: 'Any lumpsum you already have saved for this goal',
+        salary: 'Used to check if your SIP is manageable',
         inflation: 'Prices typically rise 5–7% per year in India',
         returns: 'Assumed return, not guaranteed. Equity funds historically ~10–14%',
         stepUp: 'How much you\'ll increase your SIP each year',
@@ -321,6 +325,8 @@ const LOCALES = {
     presets: { title: 'शुरू करने के लिए एक लक्ष्य चुनें', education: 'बच्चे की शिक्षा', home: 'घर खरीदना', car: 'कार खरीदना', retirement: 'सेवानिवृत्ति' },
     inputs: {
       currentCost: 'लक्ष्य की वर्तमान लागत (₹)',
+      currentSavings: 'वर्तमान बचत (₹)',
+      salary: 'मासिक वेतन (₹)',
       years: 'लक्ष्य तक वर्ष',
       yearsSuffix: 'वर्ष',
       inflation: 'मुद्रास्फीति दर (%)',
@@ -330,6 +336,8 @@ const LOCALES = {
       taxRate: 'LTCG टैक्स दर (%)',
       hints: {
         years: 'आपको इस पैसे की आवश्यकता होने तक कितने वर्ष हैं?',
+        currentSavings: 'कोई भी एकमुश्त राशि जो आपने इस लक्ष्य के लिए पहले से बचा कर रखी है',
+        salary: 'यह जांचने के लिए उपयोग किया जाता है कि क्या आपकी SIP प्रबंधनीय है',
         inflation: 'भारत में कीमतें आमतौर पर हर साल 5-7% बढ़ती हैं',
         returns: 'मान लिया गया रिटर्न, गारंटीकृत नहीं। इक्विटी फंड ऐतिहासिक रूप से ~10-14%',
         stepUp: 'आप हर साल अपनी SIP कितनी बढ़ाएंगे',
@@ -567,6 +575,8 @@ const LOCALES = {
     presets: { title: 'ஒரு இலக்கை தேர்ந்தெடுக்கவும்', education: 'கல்வி', home: 'வீடு வாங்குதல்', car: 'கார் வாங்குதல்', retirement: 'ஓய்வூதியம்' },
     inputs: {
       currentCost: 'இலக்கின் தற்போதைய செலவு (₹)',
+      currentSavings: 'தற்போதைய சேமிப்பு (₹)',
+      salary: 'மாத சம்பளம் (₹)',
       years: 'இலக்கு வரை ஆண்டுகள்',
       yearsSuffix: 'ஆண்டுகள்',
       inflation: 'பணவீக்க விகிதம் (%)',
@@ -576,6 +586,8 @@ const LOCALES = {
       taxRate: 'LTCG வரி விகிதம் (%)',
       hints: {
         years: 'உங்களுக்கு இந்தப் பணம் தேவைப்படும் வரை எத்தனை ஆண்டுகள் உள்ளன?',
+        currentSavings: 'இந்த இலக்கிற்காக நீங்கள் ஏற்கனவே சேமித்து வைத்துள்ள மொத்தத் தொகை',
+        salary: 'உங்கள் SIP நிர்வகிக்கக்கூடியதா என்பதைச் சரிபார்க்கப் பயன்படுகிறது',
         inflation: 'இந்தியாவில் விலைகள் பொதுவாக ஆண்டுக்கு 5-7% உயரும்',
         returns: 'ஊகிக்கப்பட்ட வருமானம், உத்தரவாதம் இல்லை. ஈக்விட்டி ஃபண்டுகள் வரலாற்று ரீதியாக ~10-14%',
         stepUp: 'ஒவ்வொரு ஆண்டும் உங்கள் SIP-யை எவ்வளவு அதிகரிப்பீர்கள்',

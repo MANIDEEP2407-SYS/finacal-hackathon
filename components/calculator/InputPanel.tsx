@@ -9,6 +9,7 @@ export interface CalcInputs {
   inflationRate: number;
   annualReturn:  number;
   salary:        number;
+  currentSavings: number;
   stepUpPct:     number;
   expenseRatio:  number;
   ltcgRate:      number;
@@ -36,76 +37,11 @@ export function InputPanel({ inputs, onChange }: Props) {
       <InputSlider id="years"     label={il.years}         min={1}       max={40}       step={1}      value={inputs.yearsToGoal}   onChange={v => onChange('yearsToGoal', v)}   format={fmtY} hint={il.hints.years} />
       <InputSlider id="inflation" label={il.inflation}     min={1}       max={15}       step={0.5}    value={inputs.inflationRate}  onChange={v => onChange('inflationRate', v)}  format={fmtP} hint={il.hints.inflation} />
       <InputSlider id="return"    label={il.return}        min={4}       max={20}       step={0.5}    value={inputs.annualReturn}   onChange={v => onChange('annualReturn', v)}   format={fmtP} hint={il.hints.returns} />
+      <hr className="my-6 border-slate-200" />
+      <InputSlider id="savings"   label={il.currentSavings} min={0}      max={10000000} step={10000}  value={inputs.currentSavings} onChange={v => onChange('currentSavings', v)} format={fmt}  hint={il.hints.currentSavings} />
+      <InputSlider id="salary"    label={il.salary}         min={0}      max={1000000}  step={5000}   value={inputs.salary}         onChange={v => onChange('salary', v)}         format={fmt}  hint={il.hints.salary} />
 
-      <div className="mt-8 space-y-4">
-        {/* Step-Up accordion */}
-        <AccordionToggle
-          id="stepup"
-          label={el.stepUpTitle}
-          enabled={inputs.enableStepUp}
-          onToggle={v => onChange('enableStepUp', v)}
-          note={el.stepUpNote}
-        >
-          <InputSlider id="stepup-pct" label={il.stepUp} min={0} max={30} step={1} value={inputs.stepUpPct} onChange={v => onChange('stepUpPct', v)} format={fmtP} hint={il.hints.stepUp} />
-        </AccordionToggle>
-
-        {/* Expense Ratio accordion */}
-        <AccordionToggle
-          id="expense"
-          label={el.expenseTitle}
-          enabled={inputs.enableExpense}
-          onToggle={v => onChange('enableExpense', v)}
-          note={el.expenseNote}
-        >
-          <InputSlider id="expense-ratio" label={il.expenseRatio} min={0} max={3} step={0.1} value={inputs.expenseRatio} onChange={v => onChange('expenseRatio', v)} format={fmtP} hint={il.hints.expense} />
-        </AccordionToggle>
-
-        {/* Tax accordion */}
-        <AccordionToggle
-          id="tax"
-          label={el.taxTitle}
-          enabled={inputs.enableTax}
-          onToggle={v => onChange('enableTax', v)}
-          note={el.taxNote}
-        >
-          <InputSlider id="ltcg" label={il.taxRate} min={0} max={30} step={0.5} value={inputs.ltcgRate} onChange={v => onChange('ltcgRate', v)} format={fmtP} hint={il.hints.tax} />
-        </AccordionToggle>
-      </div>
     </div>
   );
 }
 
-/* ── Internal: Accordion Toggle ── */
-interface AccordionProps {
-  id: string; label: string; note: string;
-  enabled: boolean; onToggle: (v: boolean) => void;
-  children: React.ReactNode;
-}
-function AccordionToggle({ id, label, note, enabled, onToggle, children }: AccordionProps) {
-  const { t } = useLang();
-  const { common: cl } = t;
-
-  return (
-    <div className="border rounded-lg overflow-hidden" style={{ borderColor: '#e8eef7' }}>
-      <button
-        type="button"
-        className="accordion-header px-4"
-        onClick={() => onToggle(!enabled)}
-        aria-expanded={enabled}
-        aria-controls={`${id}-panel`}
-        id={`${id}-header`}
-      >
-        <span>+ {label}</span>
-        <span style={{ color: '#919090', fontSize: '0.75rem' }}>
-          {enabled ? `${cl.hide} ▲` : `${cl.show} ▼`}
-        </span>
-      </button>
-      {enabled && (
-        <div id={`${id}-panel`} role="region" aria-labelledby={`${id}-header`} className="px-4 pt-3 pb-1">
-          <p className="text-xs mb-3 italic" style={{ color: '#da3832' }}>{note}</p>
-          {children}
-        </div>
-      )}
-    </div>
-  );
-}

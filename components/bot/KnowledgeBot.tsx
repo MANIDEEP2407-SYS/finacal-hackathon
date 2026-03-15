@@ -11,7 +11,7 @@ import { useMode } from '@/context/ModeContext';
 import { useLang } from '@/context/LangContext';
 
 export function KnowledgeBot() {
-  const { t } = useLang();
+  const { t, lang } = useLang();
   const { bot: bl } = t;
   const { state, closeBot, navigateTo, goBack, setCategory } = useBot();
   const { state: calcState } = useCalculator();
@@ -21,8 +21,13 @@ export function KnowledgeBot() {
 
   const currentNode = knowledgeGraph[state.currentNodeId];
 
+  // Pick the localized answer template if available, otherwise use the English default
+  const answerTemplate = (lang !== 'en' && currentNode?.answerI18n?.[lang])
+    ? currentNode.answerI18n[lang]!
+    : (currentNode?.answer ?? '');
+
   const { text: resolvedAnswer, usedDefaults } = resolveWithFallback(
-    currentNode?.answer ?? '',
+    answerTemplate,
     calcState,
   );
 
@@ -101,7 +106,7 @@ export function KnowledgeBot() {
         <div
           className="bot-content"
           role="region"
-          aria-label={currentNode.question}
+          aria-label={(lang !== 'en' && currentNode.questionI18n?.[lang]) ? currentNode.questionI18n[lang]! : currentNode.question}
           aria-live="polite"
           aria-atomic="true"
         >

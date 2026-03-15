@@ -24,7 +24,10 @@ import { CalcInputs } from '@/components/calculator/InputPanel';
 
 const DEFAULT_CALC: CalcInputs = {
   presentCost: 2500000, yearsToGoal: 15, inflationRate: 6,
-  annualReturn: 12, salary: 50000, stepUpPct: 10, expenseRatio: 1,
+  annualReturn: 12,
+  salary: 50000,
+  currentSavings: 0,
+  stepUpPct: 10, expenseRatio: 1,
   ltcgRate: 12.5, enableStepUp: false, enableExpense: false, enableTax: false,
 };
 
@@ -58,6 +61,7 @@ export function SevenDepthsCalculator() {
         inflationRate: inputs.inflationRate,
         annualReturn:  inputs.annualReturn,
         expenseRatio:  scenario.primary.expenseRatio,
+        currentSavings: inputs.currentSavings,
       });
     } catch { return null; }
   }, [inputs, scenario.primary.expenseRatio]);
@@ -176,6 +180,7 @@ export function SevenDepthsCalculator() {
                 <Depth1Baseline
                   result={result}
                   sip={parseFloat(result.requiredMonthlySIP.replace(/[₹, ]/g, ''))}
+                  salary={inputs.salary}
                   open={openDepths.has(1)}
                   onToggle={() => toggleDepth(1)}
                 />

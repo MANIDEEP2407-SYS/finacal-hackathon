@@ -12,9 +12,13 @@ interface Props {
 }
 
 export function NodeView({ node, resolvedAnswer, usedDefaults, onNavigate }: Props) {
-  const { t } = useLang();
+  const { t, lang } = useLang();
   const { bot: bl } = t;
-  // Highlight ₹ values in the answer
+
+  // Use localized question if available for current language
+  const localizedQuestion = (lang !== 'en' && node.questionI18n?.[lang]) ? node.questionI18n[lang]! : node.question;
+
+  // Highlight ₹ values in the answer (already resolved with correct language template)
   const highlightedAnswer = resolvedAnswer.replace(
     /(₹[\d,.]+ ?(?:Cr|L|K)?)/g,
     '<span class="personalized">$1</span>'
@@ -28,7 +32,7 @@ export function NodeView({ node, resolvedAnswer, usedDefaults, onNavigate }: Pro
   return (
     <div>
       {/* Question */}
-      <h2 className="node-question">{node.question}</h2>
+      <h2 className="node-question">{localizedQuestion}</h2>
 
       {/* Category badge */}
       <div className="mb-3">
@@ -70,7 +74,7 @@ export function NodeView({ node, resolvedAnswer, usedDefaults, onNavigate }: Pro
               onClick={() => onNavigate(related.id)}
               className="related-btn"
             >
-              {related.question}
+              {(lang !== 'en' && related.questionI18n?.[lang]) ? related.questionI18n[lang]! : related.question}
             </button>
           ))}
         </div>

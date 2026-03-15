@@ -32,18 +32,20 @@ interface InlineTriggerProps {
 }
 
 export function InlineBotTrigger({ nodeId, label }: InlineTriggerProps) {
-  const { t } = useLang();
+  const { t, lang } = useLang();
   const { bot: bl } = t;
   const { openBot } = useBot();
   const node = knowledgeGraph[nodeId];
   if (!node) return null;
+
+  const localizedQuestion = (lang !== 'en' && node.questionI18n?.[lang]) ? node.questionI18n[lang]! : node.question;
 
   return (
     <button
       type="button"
       onClick={() => openBot(nodeId)}
       className="bot-trigger"
-      aria-label={`${bl.learnAbout}: ${node.question}`}
+      aria-label={`${bl.learnAbout}: ${localizedQuestion}`}
     >
       {label ?? bl.learnMore} →
     </button>

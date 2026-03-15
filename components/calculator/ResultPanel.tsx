@@ -13,9 +13,10 @@ interface Props {
   postTax?: string;
   enableStepUp: boolean;
   enableTax: boolean;
+  salary?: number;
 }
 
-export function ResultPanel({ result, stepUpSIP, stepUpGlide, postTax, enableStepUp, enableTax }: Props) {
+export function ResultPanel({ result, stepUpSIP, stepUpGlide, postTax, enableStepUp, enableTax, salary = 0 }: Props) {
   const { t } = useLang();
   const r = t.results;
 
@@ -66,6 +67,7 @@ export function ResultPanel({ result, stepUpSIP, stepUpGlide, postTax, enableSte
           label={r.totalInvested}
           sublabel="Your contribution"
           color="blue"
+          borderAccent="blue"
         />
         <OutputCard
           value={result.wealthGained}
@@ -75,6 +77,22 @@ export function ResultPanel({ result, stepUpSIP, stepUpGlide, postTax, enableSte
           borderAccent="blue"
         />
       </div>
+
+      {/* Salary affordability insight */}
+      {salary > 0 && result && (() => {
+        const sipNum = parseFloat(result.requiredMonthlySIP.replace(/[₹, ]/g, ''));
+        if (sipNum <= 0) return null;
+        const pct = ((sipNum / salary) * 100).toFixed(1);
+        return (
+          <div className="card insight-badge flex gap-3 text-sm items-start">
+            <TrendingUp className="text-blue-600 mt-0.5 flex-shrink-0" size={18} />
+            <div>
+              <p><strong>Affordability Check:</strong> This SIP is <strong>{pct}%</strong> of your monthly salary (₹{salary.toLocaleString()}).</p>
+              <p className="text-xs opacity-80 mt-1">Financial experts recommend saving at least 20% of income across all goals.</p>
+            </div>
+          </div>
+        );
+      })()}
 
       {/* Step-up result */}
       {enableStepUp && stepUpSIP && (

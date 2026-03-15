@@ -14,8 +14,11 @@ import { Money } from '@/lib/money';
 import Decimal from 'decimal.js';
 
 const DEFAULT_INPUTS: CalcInputs = {
-  presentCost: 2500000, yearsToGoal: 15, inflationRate: 6,
-  annualReturn: 12, salary: 0, stepUpPct: 10, expenseRatio: 1,
+  presentCost: 2500000, yearsToGoal: 15,  inflationRate: 6,
+  annualReturn: 12,
+  salary: 0,
+  currentSavings: 0,
+  stepUpPct: 10, expenseRatio: 1,
   ltcgRate: 12.5, enableStepUp: false, enableExpense: false, enableTax: false,
 };
 
@@ -44,6 +47,7 @@ export function GoalCalculator() {
         inflationRate: inputs.inflationRate,
         annualReturn:  inputs.annualReturn,
         expenseRatio:  inputs.enableExpense ? inputs.expenseRatio : 0,
+        currentSavings: inputs.currentSavings,
       });
     } catch { return null; }
   }, [inputs]);
@@ -88,6 +92,7 @@ export function GoalCalculator() {
             postTax={taxResult?.postTax}
             enableStepUp={inputs.enableStepUp}
             enableTax={inputs.enableTax}
+            salary={inputs.salary}
           />
 
           {/* Growth Chart */}

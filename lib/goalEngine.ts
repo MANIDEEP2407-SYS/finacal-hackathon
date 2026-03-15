@@ -9,6 +9,7 @@ export interface GoalInputs {
   inflationRate:  number;   // Annual inflation % (e.g. 6 for 6%)
   annualReturn:   number;   // Expected annual return % (e.g. 12 for 12%)
   expenseRatio?:  number;   // Optional: expense ratio % to deduct from return
+  currentSavings?: number;  // Optional: Initial lumpsum invested
 }
 
 export interface YearSnapshot {
@@ -38,7 +39,7 @@ export interface GoalResult {
  *           n = Years × 12
  */
 export function calculateGoal(inputs: GoalInputs): GoalResult {
-  const { presentCost, yearsToGoal, inflationRate, annualReturn, expenseRatio = 0 } = inputs;
+  const { presentCost, yearsToGoal, inflationRate, annualReturn, expenseRatio = 0, currentSavings = 0 } = inputs;
 
   // Step 1 — Inflate goal
   const inflation = new Decimal(inflationRate).div(100);
@@ -51,14 +52,27 @@ export function calculateGoal(inputs: GoalInputs): GoalResult {
   const n = new Decimal(yearsToGoal).mul(12);
   const onePlusR = new Decimal(1).add(r);
 
-  const denominator = Decimal.pow(onePlusR, n).sub(1).mul(onePlusR);
-  const requiredSIP = inflatedGoal.mul(r).div(denominator);
+  // Future value of current savings
+  const initialCorpus = new Decimal(currentSavings);
+  const fvSavings = initialCorpus.mul(Decimal.pow(onePlusR, n));
+
+  // Remaining goal to be funded via SIP
+  let remainingGoal = inflatedGoal.sub(fvSavings);
+  if (remainingGoal.isNegative()) remainingGoal = new Decimal(0);
+
+  let requiredSIP = new Decimal(0);
+  if (remainingGoal.greaterThan(0)) {
+    const denominator = Decimal.pow(onePlusR, n).sub(1).mul(onePlusR);
+    requiredSIP = remainingGoal.mul(r).div(denominator);
+  }
 
   // Year-by-year breakdown
-  const yearByYear = buildYearByYear(requiredSIP, r, yearsToGoal, inflatedGoal);
+  const yearByYear = buildYearByYear(requiredSIP, r, yearsToGoal, inflatedGoal, initialCorpus);
+  
+  const finalCorpus = yearByYear.length > 0 ? new Decimal(yearByYear[yearByYear.length - 1].rawCorpus) : new Decimal(0);
 
-  const totalInvested = requiredSIP.mul(n);
-  const wealthGained  = inflatedGoal.sub(totalInvested);
+  const totalInvested = requiredSIP.mul(n).add(initialCorpus);
+  const wealthGained  = finalCorpus.sub(totalInvested);
 
   return {
     inflatedGoalValue:  Money.format(inflatedGoal),
@@ -75,24 +89,26 @@ function buildYearByYear(
   monthlyRate: Decimal,
   years: number,
   inflatedGoal: Decimal,
+  initialCorpus: Decimal = new Decimal(0)
 ): YearSnapshot[] {
   const snapshots: YearSnapshot[] = [];
-  let corpus = new Decimal(0);
+  let corpus = initialCorpus;
 
   for (let y = 1; y <= years; y++) {
     for (let m = 0; m < 12; m++) {
       corpus = corpus.add(sip).mul(new Decimal(1).add(monthlyRate));
     }
     const sipPaid = sip.mul(y * 12);
+    const totalInvestedSoFar = sipPaid.add(initialCorpus);
     const progress = Math.min(100, Math.round(corpus.div(inflatedGoal).mul(100).toNumber()));
 
     snapshots.push({
       year: y,
-      sipPaid:      Money.format(sipPaid),
+      sipPaid:      Money.format(totalInvestedSoFar),
       corpusValue:  Money.format(corpus),
       goalProgress: progress,
       rawCorpus:    corpus.toNumber(),
-      rawInvested:  sipPaid.toNumber(),
+      rawInvested:  totalInvestedSoFar.toNumber(),
     });
   }
   return snapshots;
