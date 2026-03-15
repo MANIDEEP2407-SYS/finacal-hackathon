@@ -260,6 +260,7 @@ The calculator:
 
 # Disclaimer
 
+
 This tool has been designed for information purposes only.
 Actual results may vary depending on various factors involved in capital markets.
 Investors should not consider this as a recommendation for any scheme of HDFC Mutual Fund.
@@ -281,3 +282,8 @@ Potential future improvements include:
 # License
 
 This project was created for the **FinCal Innovation Hackathon** and is intended for educational purposes.
+
+
+#video link
+https://1drv.ms/v/c/37b6ae89b4faea5f/IQCfCLw7A94xRLD_D9lpRfhTAYCjTn7Wh04_oIn2NToYzJA?e=phGTtq
+
